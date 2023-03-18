@@ -7,19 +7,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController // TODO(AntiO2) Remember delete it
 public class HelloController {
-
-    @GetMapping("/hello")
-    @PreAuthorize("hasAuthority('hello')")
-    String hello(){
-        return "hello";
-    }
     @GetMapping("/test")
-    @PreAuthorize("hasAuthority('system:dept:list')")
+    @PreAuthorize("hasAuthority('system:anti:test')")
     String test(){
         return "test";
     }
-    @RequestMapping("/admin")
-    @PreAuthorize("hasAuthority('admin')")
+    @GetMapping("/admin")
+    @PreAuthorize("hasAuthority('system:admin:test')")
     public String admin(){
         return "admin";
     }

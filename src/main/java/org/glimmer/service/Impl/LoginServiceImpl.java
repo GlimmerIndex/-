@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 @Service
-public class loginServiceImpl implements LoginService {
+public class LoginServiceImpl implements LoginService {
     @Autowired
     private AuthenticationManager authenticationManager;
 

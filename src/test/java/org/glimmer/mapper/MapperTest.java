@@ -22,4 +22,8 @@ public class MapperTest {
     public void testselectPermsByUserId(){
         System.out.println(menuMapper.selectPermsByUserId(2L));
     }
+    @Test
+    public void getNextKey(){
+        System.out.println(userMapper.getNextId());
+    }
 }
