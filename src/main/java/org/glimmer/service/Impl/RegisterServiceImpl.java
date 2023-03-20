@@ -46,7 +46,7 @@ public class RegisterServiceImpl implements RegisterService {
         String email = user.getEmail();
         String userName = user.getUserName();
         String rawPwd = user.getPassword();
-        if(email==null) {
+        if(email==null||email.equals("")) {
             return new  ResponseResult(4002,"邮箱无效");
         }
         LambdaQueryWrapper<User> queryByEmail = new LambdaQueryWrapper<User>();
@@ -55,7 +55,7 @@ public class RegisterServiceImpl implements RegisterService {
         if(!Objects.isNull(userExisted)) {
             return new ResponseResult(4002,"邮箱已被注册");
         }
-        if(Objects.isNull(rawPwd)) {
+        if(Objects.isNull(rawPwd)||rawPwd.equals("")) {
             return new ResponseResult(4005,"密码无效");
         }
         LambdaQueryWrapper<User> queryByUserName = new LambdaQueryWrapper<User>();
@@ -76,16 +76,18 @@ public class RegisterServiceImpl implements RegisterService {
 
     public ResponseResult Active(String activeCode) {
         User user = (User)redisCache.getCacheObject("active-code:" + activeCode);
+        redisCache.deleteObject("active-code:" + activeCode);
         if(Objects.isNull(user)) {
             return new ResponseResult(4004,"激活码无效或已过期，请尝试重新注册");
         }
         user.setStatus("0");
         try {
-            Long nextId = userMapper.getNextId();
+            Long nextId = userMapper.getNextId() + 1;
             user.setId(nextId);
             userMapper.insert(user);
             UserToRole userToRole = new UserToRole(nextId, Long.valueOf(user.getUserType()));
             userToRoleMapper.insert(userToRole);
+
         }catch (Exception e) {
             e.printStackTrace();
             return new ResponseResult(3001,"数据库发生错误，请联系管理员");

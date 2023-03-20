@@ -5,14 +5,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController // TODO(AntiO2) Remember delete it
+@RestController
 public class HelloController {
-    @GetMapping("/test")
+    @GetMapping("/test/user")
     @PreAuthorize("hasAuthority('system:anti:test')")
     String test(){
         return "test";
     }
-    @GetMapping("/admin")
+    @GetMapping("/test/admin")
     @PreAuthorize("hasAuthority('system:admin:test')")
     public String admin(){
         return "admin";

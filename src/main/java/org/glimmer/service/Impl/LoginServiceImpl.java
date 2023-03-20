@@ -7,6 +7,7 @@ import org.glimmer.service.LoginService;
 import org.glimmer.utils.JwtUtil;
 import org.glimmer.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -23,7 +25,8 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private RedisCache redisCache;
-
+    @Value("${glimmer.index.user.token-life}")
+    private Integer  tokenLife;
     @Override
     public ResponseResult<HashMap<String, String>> login(User user) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
@@ -35,9 +38,8 @@ public class LoginServiceImpl implements LoginService {
         LoginUser loginUser = (LoginUser)authenticate.getPrincipal();
         String userId = loginUser.getUser().getId().toString();
         String jwt = JwtUtil.createJWT(userId);
-        redisCache.setCacheObject("login:"+userId, loginUser);
+        redisCache.setCacheObject("login:"+userId, loginUser,tokenLife, TimeUnit.MINUTES);
         HashMap<String,String> map = new HashMap<>();
-
         map.put("token",jwt);
         return new ResponseResult<HashMap<String, String>>(200,"登陆成功",map);
     }
