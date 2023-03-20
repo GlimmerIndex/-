@@ -89,11 +89,27 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
 
-<!--邮箱服务-->
+        <!--邮箱服务-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
+
+        <!--搜索引擎-->
+        <!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-core -->
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>9.5.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.magese/ik-analyzer -->
+        <dependency>
+            <groupId>com.github.magese</groupId>
+            <artifactId>ik-analyzer</artifactId>
+            <version>8.4.0</version>
+        </dependency>
+
+
     </dependencies>
 
 </project>
