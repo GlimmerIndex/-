@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Index File
+dir/
+index/
