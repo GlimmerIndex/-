@@ -1,5 +1,6 @@
 package org.glimmer.mapper;
 
+import lombok.val;
 import org.glimmer.domain.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,13 @@ public class MapperTest {
     @Test
     public void getNextKey(){
         System.out.println(userMapper.getNextId());
+    }
+
+    @Autowired
+    private DocsMapper docsMapper;
+    @Test
+    public void getDocs() {
+        val docs = docsMapper.selectList(null);
+        System.out.println(docs);
     }
 }
