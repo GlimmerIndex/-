@@ -29,7 +29,16 @@ spring:
         smtp:
           ssl:
             enable: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 1000MB
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
 #  redis:
 #    password: 123456
+storage:
+  image:
+    #允许上传的类型
+    allow-type:
+      pdf

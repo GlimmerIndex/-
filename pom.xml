@@ -94,6 +94,20 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
+<!--判断文件内容-->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-app</artifactId>
+            <version>1.26</version>
+            <type>pom</type>
+        </dependency>
+<!-- 配置注释处理器-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
 
 </project>
