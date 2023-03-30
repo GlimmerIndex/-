@@ -55,7 +55,7 @@ public class UploadPDFServicelmpl implements UploadPDFService {
                 queryByHash.eq(PDFFiles::getHashFileName,hashString);
                 PDFFiles PDFExisted = PDFfilesMapper.selectOne(queryByHash);
                 if(!Objects.isNull(PDFExisted)){
-                    return new ResponseResult(4015,file.getOriginalFilename()+"文件已存在");
+                    return new ResponseResult(4013,file.getOriginalFilename()+"文件已存在");
                 }
             }catch(Exception e){
                 e.printStackTrace();
@@ -80,7 +80,7 @@ public class UploadPDFServicelmpl implements UploadPDFService {
             }
 
         }
-        return new ResponseResult(200,"文件上传成功");
+        return new ResponseResult(201,"文件上传成功");
     }
 
 
