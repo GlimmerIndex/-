@@ -63,14 +63,15 @@ public class UploadPDFServicelmpl implements UploadPDFService {
             }
             PDFFiles rightPDFFiles = new PDFFiles();
             rightPDFFiles.setUploadBy(id);//上传人ID
-            rightPDFFiles.setFilePath("/PDFFiles/"+generateUniqueFileName(file.getOriginalFilename()));//文件路径
+            String uniqueFileName = generateUniqueFileName(file.getOriginalFilename());
+            rightPDFFiles.setFilePath("PDFFiles/"+uniqueFileName);//文件路径
             rightPDFFiles.setHashFileName(hashString);//文件哈希串
             rightPDFFiles.setFileName(file.getOriginalFilename());//文件原始名
             rightPDFFiles.setFileSize(file.getSize());//文件大小
             rightPDFFiles.setFileType(getFileExtension(file.getOriginalFilename()));//文件类型
             Date date = new Date();
             rightPDFFiles.setUploadTime(date);//文件上传时间
-            saveFile(file.getInputStream(),generateUniqueFileName(file.getOriginalFilename()));//保存文件
+            saveFile(file.getInputStream(),uniqueFileName);//保存文件
             try{
                 PDFfilesMapper.insert(rightPDFFiles);
             }catch (Exception e){

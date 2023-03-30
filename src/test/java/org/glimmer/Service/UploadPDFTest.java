@@ -27,7 +27,7 @@ public class UploadPDFTest {
     void UploadTest(){
 
 
-        File f1 = new File("D:\\C语言scanf的高级用法，原来scanf还有这么多新技能.pdf");
+        File f1 = new File("D:\\C语言scanf的高级用法，原来scanf还有这么多新技能1.pdf");
         File f2 = new File("D:\\simple database learning.pdf");
         File f3 = new File("D:\\C语言笔记2022.docx");
 
