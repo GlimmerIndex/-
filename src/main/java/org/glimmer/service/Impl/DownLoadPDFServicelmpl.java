@@ -32,6 +32,7 @@ public class DownLoadPDFServicelmpl implements DownLoadPDFService {
 
         PDFFiles pdfFiles = pdfFilesMapper.selectById(fileId);
         //文件不存在
+
         if(pdfFiles == null){
             return ResponseEntity.notFound().build();
         }
@@ -39,7 +40,7 @@ public class DownLoadPDFServicelmpl implements DownLoadPDFService {
 
         try {
             String filePath = pdfFiles.getFilePath();
-            File file = new File("C:/Users/W10/IdeaProjects/Glimmer-Index-Back-End/"+filePath);
+            File file = new File(filePath);
             if (file == null&&file.canRead()==false){
                 throw new RuntimeException("Not found");
             }

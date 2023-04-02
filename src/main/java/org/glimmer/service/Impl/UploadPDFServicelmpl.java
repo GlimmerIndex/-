@@ -46,6 +46,7 @@ public class UploadPDFServicelmpl implements UploadPDFService {
                 e.printStackTrace();
                 return new ResponseResult(4012, "IO流出错");
             }
+
             // 计算文件内容的哈希值
             try{
                 MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -59,7 +60,7 @@ public class UploadPDFServicelmpl implements UploadPDFService {
                 }
             }catch(Exception e){
                 e.printStackTrace();
-                return new ResponseResult(4014,"文件上传失败，文件重复或查重失败");
+                return new ResponseResult(4014,"文件上传失败，文件查重失败");
             }
             PDFFiles rightPDFFiles = new PDFFiles();
             rightPDFFiles.setUploadBy(id);//上传人ID
