@@ -9,5 +9,5 @@ public interface DeletePDFFiles {
      * @return admin管理文件界面
      * @throws FileNotFoundException
      */
-    public String DeletePDF(Long fileId) throws FileNotFoundException;
+    public boolean DeletePDF(Long fileId) throws FileNotFoundException;
 }

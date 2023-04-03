@@ -16,24 +16,24 @@ public class DeletePDFFilesServicelmpl implements DeletePDFFiles {
     @Autowired
     PDFFilesMapper pdfFilesMapper;
     @Override
-    public String DeletePDF(Long fileId) throws FileNotFoundException{
+    public boolean DeletePDF(Long fileId) throws FileNotFoundException{
 
-
+        boolean flag = false;
         PDFFiles pdfFile = pdfFilesMapper.selectById(fileId);
         if(pdfFile==null){
-            return "文件不存在";
+            return flag;
         }
         String filePath = pdfFile.getFilePath();
         File file = new File(filePath);
         //删除文件
-        if(file.exists()) {
+        if(file.exists()&&file.isFile()) {
             file.delete();
         }else{
-            return "文件不存在";
+            return flag;
         }
         //删除数据库文件记录
         pdfFilesMapper.deleteById(fileId);
         //返回管理员管理文件界面
-        return "OK";//TODO 重定向至admin管理文件页面
+        return true;
     }
 }

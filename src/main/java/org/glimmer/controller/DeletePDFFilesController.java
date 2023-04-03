@@ -16,7 +16,11 @@ public class DeletePDFFilesController {
     DeletePDFFiles deletePDFFiles;
     @GetMapping("/delete/pdf")
     @PreAuthorize("hasAuthority('delete:pdf:throw')")
-    public String DeletePDFs(@RequestParam("fileId") Long fileId)throws Exception{
-        return deletePDFFiles.DeletePDF(fileId);
+    public String DeletePDFs(@RequestParam("fileId") Long fileId){
+        try{
+        return deletePDFFiles.DeletePDF(fileId)?"文件已删除":"文件删除失败";
+        }catch (Exception e){
+            return e.getMessage();
+        }
     }
 }
