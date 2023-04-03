@@ -46,7 +46,6 @@ public class UploadPDFServicelmpl implements UploadPDFService {
                 e.printStackTrace();
                 return new ResponseResult(4012, "IO流出错");
             }
-
             // 计算文件内容的哈希值
             try{
                 MessageDigest md = MessageDigest.getInstance("SHA-256");
