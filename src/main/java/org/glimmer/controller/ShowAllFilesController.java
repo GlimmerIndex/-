@@ -20,6 +20,6 @@ public class ShowAllFilesController {
     @GetMapping("/show/pdf")
     @PreAuthorize("hasAuthority('show:pdf:see')")
     public List<PDFFiles> ShowFiles(){
-        return showAllFiles.ShowFiles();
+        return showAllFiles.showFiles();
     }
 }

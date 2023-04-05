@@ -63,4 +63,12 @@ public class PDFFiles {
      * UUId文件名
      */
     private String uuidFileName;
+    /**
+     * 点赞数
+     */
+    private Long likeNumber;
+    /**
+     * 点踩数
+     */
+    private Long unlikeNumber;
 }

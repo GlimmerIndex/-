@@ -27,7 +27,7 @@ public class DeleteTest {
     ShowAllFiles showAllFiles;
     @Test
     void show(){
-        List<PDFFiles> pdfFiles =  showAllFiles.ShowFiles();
+        List<PDFFiles> pdfFiles =  showAllFiles.showFiles();
         System.out.println(pdfFiles);
     }
 }

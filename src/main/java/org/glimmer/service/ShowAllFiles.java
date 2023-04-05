@@ -10,5 +10,5 @@ public interface ShowAllFiles {
      * 展示文件
      * @return 所有文件信息
      */
-    public List<PDFFiles> ShowFiles();
+    public List<PDFFiles> showFiles();
 }
