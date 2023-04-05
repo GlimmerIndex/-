@@ -27,7 +27,7 @@ public class UserCacheServicelmpl implements UserCacheService {
                 redisCache.setCacheSetVal(userKey,file);
             }
         }
-        redisCache.expire(userKey,30,TimeUnit.MINUTES);//设置缓存过期
+        redisCache.expire(userKey,60,TimeUnit.MINUTES);//设置缓存过期
     }
 
     @Override
@@ -40,7 +40,7 @@ public class UserCacheServicelmpl implements UserCacheService {
                 redisCache.setCacheSetVal(userKey,file);
             }
         }
-        redisCache.expire(userKey,30,TimeUnit.MINUTES);
+        redisCache.expire(userKey,60,TimeUnit.MINUTES);
     }
 
 }

@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class LikeServicelmpl implements LikeService {
@@ -26,7 +27,9 @@ public class LikeServicelmpl implements LikeService {
     public boolean like(Long userId,Long fileId){
         String userKey = "user_like:" + Long.toString(userId);
         String fileKey = "file_like:" + Long.toString(fileId);
+        redisCache.expire(fileKey,60, TimeUnit.MINUTES);
         String cancelKey = "cancel_like:" + Long.toString(fileId);
+        redisCache.expire(cancelKey,60,TimeUnit.MINUTES);
         Set<Long> files = redisCache.getCacheSet(userKey);
         if (files == null){
             userCacheService.userLikeCache(userId);//如果刚开始redis中没有点赞数据，则缓存
@@ -56,7 +59,9 @@ public class LikeServicelmpl implements LikeService {
     public boolean dislike(Long userId,Long fileId){
         String userKey = "user_dislike:" + Long.toString(userId);
         String fileKey = "file_dislike:" + Long.toString(fileId);
-        String cancelKey = "cancel_dislike" + Long.toString(userId);
+        redisCache.expire(fileKey,60, TimeUnit.MINUTES);
+        String cancelKey = "cancel_dislike" + Long.toString(fileId);
+        redisCache.expire(cancelKey,60,TimeUnit.MINUTES);
         Set<Long> files = redisCache.getCacheSet(userKey);
         if(files == null){
             userCacheService.userDislikeCache(userId);//如果刚开始redis中没有点赞数据，则缓存
@@ -76,7 +81,7 @@ public class LikeServicelmpl implements LikeService {
     public boolean undislike(Long userId,Long fileId){
         String userKey = "user_dislike:" + Long.toString(userId);
         String fileKey = "file_dislike:" + Long.toString(fileId);
-        String cancelKey = "cancel_dislike" + Long.toString(userId);
+        String cancelKey = "cancel_dislike" + Long.toString(fileId);
         redisCache.setCacheSetVal(cancelKey,userId);
         redisCache.removeCacheSetVal(userKey,fileId);
         redisCache.removeCacheSetVal(fileKey,userId);
