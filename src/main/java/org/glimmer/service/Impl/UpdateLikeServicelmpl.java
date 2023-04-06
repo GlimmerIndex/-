@@ -28,7 +28,7 @@ public class UpdateLikeServicelmpl implements UpdateLikeService {
 
     @Override
     public void updateLike(Long fileId){
-        String fileKey = "user_like:" + Long.toString(fileId);
+        String fileKey = "file_like:" + Long.toString(fileId);
         Set<Long> users = redisCache.getCacheSet(fileKey);//赞
 
         String cancelKey = "cancel_like" + Long.toString(fileId);
@@ -59,7 +59,7 @@ public class UpdateLikeServicelmpl implements UpdateLikeService {
 
     @Override
     public void updateDislike(Long fileId){
-        String fileKey = "user_like:" + Long.toString(fileId);
+        String fileKey = "file_like:" + Long.toString(fileId);
         Set<Long> users = redisCache.getCacheSet(fileKey);
 
         String cancelKey = "cancel_dislike:" + Long.toString(fileId);

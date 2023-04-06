@@ -16,6 +16,11 @@ public interface PDFFilesMapper extends BaseMapper<PDFFiles> {
     @Select("select * from sys_files")
     List<PDFFiles> findAll();
 
+
+    @Select("SELECT id FROM sys_files")
+    List<Long> getFilesId();
+
+
     @Update("UPDATE sys_files SET like_number = #{likeNumber} WHERE id = #{fileId}")
     Integer updateFileLikedCount(@Param("likeNumber") Long likeNumber,@Param("fileId") Long fileId);
 

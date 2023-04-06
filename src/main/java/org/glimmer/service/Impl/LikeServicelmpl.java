@@ -36,7 +36,7 @@ public class LikeServicelmpl implements LikeService {
             files = redisCache.getCacheSet(userKey);
         }
         for (Long file : files){
-            if(file == fileId){
+            if(file.equals(fileId)){
                 return unlike(userId,fileId);
             }
         }
@@ -60,7 +60,7 @@ public class LikeServicelmpl implements LikeService {
         String userKey = "user_dislike:" + Long.toString(userId);
         String fileKey = "file_dislike:" + Long.toString(fileId);
         redisCache.expire(fileKey,60, TimeUnit.MINUTES);
-        String cancelKey = "cancel_dislike" + Long.toString(fileId);
+        String cancelKey = "cancel_dislike:" + Long.toString(fileId);
         redisCache.expire(cancelKey,60,TimeUnit.MINUTES);
         Set<Long> files = redisCache.getCacheSet(userKey);
         if(files == null){
@@ -68,7 +68,7 @@ public class LikeServicelmpl implements LikeService {
             files = redisCache.getCacheSet(userKey);
         }
         for (Long file : files){
-            if(file == fileId){
+            if(file.equals(fileId)){
                 return undislike(userId,fileId);
             }
         }
@@ -81,7 +81,7 @@ public class LikeServicelmpl implements LikeService {
     public boolean undislike(Long userId,Long fileId){
         String userKey = "user_dislike:" + Long.toString(userId);
         String fileKey = "file_dislike:" + Long.toString(fileId);
-        String cancelKey = "cancel_dislike" + Long.toString(fileId);
+        String cancelKey = "cancel_dislike:" + Long.toString(fileId);
         redisCache.setCacheSetVal(cancelKey,userId);
         redisCache.removeCacheSetVal(userKey,fileId);
         redisCache.removeCacheSetVal(fileKey,userId);
