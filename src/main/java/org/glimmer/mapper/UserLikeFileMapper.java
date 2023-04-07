@@ -64,7 +64,7 @@ public interface UserLikeFileMapper extends BaseMapper<UserLikeFile> {
      * @return
      */
     @Update("UPDATE sys_user_like SET is_disliked = #{is_disliked} WHERE liked_file_id = #{liked_file_id} AND liked_user_id = #{liked_user_id}")
-    Integer updateDisLiked(@Param("is_disliked") Integer isDisliked,@Param("liked_file_id") Long isLikedFileId,@Param("Liked_user_id") Long likedUser);
+    Integer updateDisLiked(@Param("is_disliked") Integer isDisliked,@Param("liked_file_id") Long isLikedFileId,@Param("liked_user_id") Long likedUser);
 
     /**
      * 删除点赞和点踩为零的数据

@@ -70,5 +70,5 @@ public class PDFFiles {
     /**
      * 点踩数
      */
-    private Long unlikeNumber;
+    private Long dislikeNumber;
 }

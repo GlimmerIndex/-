@@ -26,6 +26,6 @@ public interface PDFFilesMapper extends BaseMapper<PDFFiles> {
 
 
     @Update("UPDATE sys_files SET dislike_number = #{dislikeNumber} WHERE id = #{fileId}")
-    Integer updateFileDislikeCount(@Param("disNumber") Long dislikeNumber,@Param("fileId") Long fileId);
+    Integer updateFileDislikeCount(@Param("dislikeNumber") Long dislikeNumber,@Param("fileId") Long fileId);
 
 }

@@ -18,7 +18,7 @@ public class ShowAllFileslmpl implements ShowAllFiles {
     public List<PDFFiles> showFiles(){
         List<PDFFiles> pdfFiles = pdfFilesMapper.findAll();
         if(pdfFiles.isEmpty()){
-            System.out.println("kong");
+            return null;
         }
         return pdfFiles;
     }

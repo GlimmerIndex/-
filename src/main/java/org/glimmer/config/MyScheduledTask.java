@@ -37,6 +37,6 @@ public class MyScheduledTask implements SchedulingConfigurer {
                         updateLikeService.updateLikeCount(fileId);
                         updateLikeService.updateDislikeCount(fileId);
                     }
-                },1000*50*60);
+                },1000*5);
     }
 }
