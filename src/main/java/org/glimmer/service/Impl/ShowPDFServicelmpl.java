@@ -1,12 +1,6 @@
 package org.glimmer.service.Impl;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.tool.xml.ElementList;
-import com.itextpdf.tool.xml.XMLWorkerHelper;
 import org.glimmer.domain.PDFFiles;
 import org.glimmer.mapper.PDFFilesMapper;
 import org.glimmer.service.ShowPDFService;

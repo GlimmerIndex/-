@@ -103,4 +103,5 @@ public interface UserLikeFileMapper extends BaseMapper<UserLikeFile> {
     Long getUserDislikeFileCount(@Param("fileId") Long fileId,@Param("isDisliked") Integer isDisliked);
 
 
+
 }
