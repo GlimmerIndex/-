@@ -17,12 +17,9 @@ public class ShowPDFController {
     @Autowired
     ShowPDFService showPDFService;
 
-    @GetMapping("/show/pdf/{fileId}")
+    @GetMapping("/preview/pdf/{fileId}")
     @PreAuthorize("hasAuthority('show:pdf:preview')")
     public ResponseEntity<StreamingResponseBody> showPDF(@PathVariable Long fileId){
         return showPDFService.showPDF(fileId);
     }
-
-
-
 }

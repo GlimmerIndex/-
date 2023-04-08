@@ -1,6 +1,7 @@
 package org.glimmer.controller;
 
 
+import org.glimmer.domain.ResponseResult;
 import org.glimmer.service.DeletePDFFiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,11 +17,16 @@ public class DeletePDFFilesController {
     DeletePDFFiles deletePDFFiles;
     @GetMapping("/delete/pdf")
     @PreAuthorize("hasAuthority('delete:pdf:throw')")
-    public String DeletePDFs(@RequestParam("fileId") Long fileId){
+    public ResponseResult DeletePDFs(@RequestParam("fileId") Long fileId){
         try{
-        return deletePDFFiles.DeletePDF(fileId)?"文件已删除":"文件删除失败";
+            if (deletePDFFiles.DeletePDF(fileId)==true){
+                return new ResponseResult<>(4025,"文件删除成功");
+            }else{
+               return new ResponseResult<>(4026,"文件删除失败");
+            }
         }catch (Exception e){
-            return e.getMessage();
+            return new ResponseResult<>(4027,"文件不存在");
         }
+
     }
 }
