@@ -32,17 +32,14 @@ public class DownLoadPDFServicelmpl implements DownLoadPDFService {
 
         PDFFiles pdfFiles = pdfFilesMapper.selectById(fileId);
         //文件不存在
-
         if(pdfFiles == null){
             return ResponseEntity.notFound().build();
         }
-
-
         try {
             String filePath = pdfFiles.getFilePath();
             File file = new File(filePath);
             if (file == null&&file.canRead()==false){
-                throw new RuntimeException("Not found");
+                return ResponseEntity.notFound().build();
             }
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + pdfFiles.getFileName())
