@@ -1,5 +1,6 @@
 package org.glimmer.utils;
 
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.HashOperations;
@@ -142,6 +143,22 @@ public class RedisCache
     }
 
     /**
+     * 简单缓存set
+     * @param key
+     * @param value
+     */
+    public <T> void setCacheSetVal(final String key, final T value){ redisTemplate.opsForSet().add(key,value); }
+
+    /**
+     * 删除缓存
+     * @param key
+     * @param value
+     * @param <T>
+     */
+    public <T> void removeCacheSetVal(final String key , final T value){redisTemplate.opsForSet().remove(key,value);}
+
+
+    /**
      * 获得缓存的set
      *
      * @param key
@@ -151,6 +168,15 @@ public class RedisCache
     {
         return redisTemplate.opsForSet().members(key);
     }
+
+    /**
+     * 获取set元素数量
+     * @param key
+     * @return
+     */
+    public Long  getCacheSetNumber(final String key){return redisTemplate.opsForSet().size(key);}
+
+
 
     /**
      * 缓存Map
