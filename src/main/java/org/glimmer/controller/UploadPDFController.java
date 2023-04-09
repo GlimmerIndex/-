@@ -25,7 +25,7 @@ public class UploadPDFController {
 
 
   //上传PDF
-    @PostMapping("/uploads/pdf/{id}")
+    @PostMapping("/uploads/pdf")
     @PreAuthorize("hasAuthority('uploads:pdf:get')")
     public ResponseResult UploadPDF(@RequestHeader("token") String token, @RequestBody MultipartFile[] pdfFiles)throws IOException {
       try {

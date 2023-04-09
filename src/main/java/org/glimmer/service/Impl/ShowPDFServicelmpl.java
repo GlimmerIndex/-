@@ -35,6 +35,7 @@ public class ShowPDFServicelmpl implements ShowPDFService {
             return ResponseEntity.notFound().build();
         }
         try {
+            pdfFilesMapper.visitsIncrement(fileId);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
             headers.setContentDispositionFormData("inline",pdfFile.getFileName());
