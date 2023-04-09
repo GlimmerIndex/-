@@ -1,8 +1,10 @@
 package org.glimmer.controller;
 
 
+import io.jsonwebtoken.Claims;
 import org.glimmer.service.DownLoadPDFService;
 import org.glimmer.service.UploadPDFService;
+import org.glimmer.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,7 @@ import java.io.IOException;
 
 @RestController
 public class UploadPDFController {
-//TODO
+
 
   @Autowired
   UploadPDFService uploadPDFService;
@@ -25,8 +27,16 @@ public class UploadPDFController {
   //上传PDF
     @PostMapping("/uploads/pdf/{id}")
     @PreAuthorize("hasAuthority('uploads:pdf:get')")
-    public ResponseResult UploadPDF(@PathVariable Long id, @RequestBody MultipartFile[] pdfFiles)throws IOException {
-        return uploadPDFService.uploadPDF(pdfFiles,id);
+    public ResponseResult UploadPDF(@RequestHeader("token") String token, @RequestBody MultipartFile[] pdfFiles)throws IOException {
+      try {
+        Claims claims = JwtUtil.parseJWT(token);
+        Long userId = Long.valueOf(claims.getSubject());
+        return uploadPDFService.uploadPDF(pdfFiles,userId);
+      }catch (Exception e){
+        e.printStackTrace();
+        return new ResponseResult<>(4025,"token 非法");
+      }
+
     }
 
 
