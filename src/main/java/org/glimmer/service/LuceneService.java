@@ -4,6 +4,7 @@ import org.glimmer.domain.Docs;
 import org.glimmer.domain.ResponseResult;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -41,5 +42,5 @@ public interface LuceneService {
      * @param pageOffset 偏移值，用于分页，比如一页显示n篇文档，那么第m页的偏移值是(m-1)*n,传入变量为n(显示第几页)
      * @return
      */
-    public ResponseResult<List<List<Docs>>> SearchGroupByKeyword(String keyword,int pageOffset);
+    public ResponseResult SearchGroupByKeyword(String keyword,int pageOffset) throws IOException;
 }

@@ -15,8 +15,11 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.BytesRef;
 import org.glimmer.domain.Docs;
+import org.glimmer.domain.PDFFiles;
 import org.glimmer.domain.ResponseResult;
+import org.glimmer.domain.SearchResult;
 import org.glimmer.mapper.DocsMapper;
+import org.glimmer.mapper.PDFFilesMapper;
 import org.glimmer.service.LuceneService;
 import org.glimmer.utils.LuceneUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,7 @@ import javax.print.Doc;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,6 +41,8 @@ public class LuceneServiceImpl implements LuceneService {
     @Autowired
     DocsMapper docsMapper;
 
+    @Autowired
+    PDFFilesMapper filesMapper;
     @Autowired
     @Qualifier("ContentType")
     FieldType contentType;
@@ -166,7 +172,7 @@ public class LuceneServiceImpl implements LuceneService {
      * @return
      */
     @Override
-    public ResponseResult<List<List<Docs>>> SearchGroupByKeyword(String keyword, int pageOffset) {
+    public ResponseResult SearchGroupByKeyword(String keyword, int pageOffset) throws IOException {
         IndexSearcher indexSearcher = null;
         try {
             indexSearcher = new IndexSearcher(DirectoryReader.open(FSDirectory.open(Path.of(indexPath))));
@@ -185,19 +191,18 @@ public class LuceneServiceImpl implements LuceneService {
         if(topGroups.groups.length==0) {
             return new ResponseResult<>(200,"未找到相关结果");
         }
-        List<List<Docs>> result = new ArrayList<List<Docs>>();
+        List<SearchResult> result = new ArrayList<SearchResult>();
         for(val topGroup:topGroups.groups) {
-            List<Docs> groupResult = new ArrayList<Docs>();
+
+            SearchResult para = new SearchResult();
+            String pdf_id = indexSearcher.doc(topGroup.scoreDocs[0].doc).getField("pdf_id").stringValue();
             for(val scoreDoc:topGroup.scoreDocs) {
                 try {
                     val doc = indexSearcher.doc(scoreDoc.doc);
-                    Docs para = new Docs();
-                    String pdf_id = doc.getField("pdf_id").stringValue();
+                    pdf_id = doc.getField("pdf_id").stringValue();
                     String page_id = doc.getField("page_id").stringValue();
                     String para_id = doc.getField("para_id").stringValue();
-                    para.setPdfId(pdf_id);
-                    para.setPageId(page_id);
-                    para.setParaId(para_id);
+
 
                     val docsLambdaQueryWrapper = new LambdaQueryWrapper<Docs>();
                     docsLambdaQueryWrapper.eq(Docs::getPdfId,pdf_id).eq(Docs::getPageId,page_id).eq(Docs::getParaId,para_id);
@@ -208,19 +213,29 @@ public class LuceneServiceImpl implements LuceneService {
                     }
                     StringBuilder content = new StringBuilder();
                     for(val paraHit:paras) {
-                        content.append(paraHit.content);
+                        para.AddPara(paraHit.content);
                     }
-                    para.setContent(content.toString());
-                    groupResult.add(para);
                 } catch (IOException e) {
                    return new ResponseResult(5006,"索引查找失败");
                 }
                 catch (RuntimeException e) {
+                    e.printStackTrace();
                     return new ResponseResult(3001,"数据库错误");
                 }
 
             }
-            result.add(groupResult);
+
+            // 获取文件名
+            val pdfFilesLambdaQueryWrapper = new LambdaQueryWrapper<PDFFiles>();
+            pdfFilesLambdaQueryWrapper.eq(PDFFiles::getId,pdf_id);
+            val pdfFilesName = filesMapper.selectList(pdfFilesLambdaQueryWrapper);
+            if(pdfFilesName.isEmpty()) {
+                continue;
+            }
+            para.setFileName(String.valueOf(pdfFilesName.get(0).getFileName()));
+
+            para.setFileID(String.valueOf(pdfFilesName.get(0).getId()));
+            result.add(para);
         }
         return new ResponseResult<>(200,"查找成功",result);
     }

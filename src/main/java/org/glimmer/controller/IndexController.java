@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/index")
 public class IndexController {
@@ -37,8 +39,7 @@ public class IndexController {
 
     @GetMapping("/{keyword}/{pageOffset}")
     @PreAuthorize("hasAuthority('system:index:search')")
-    public ResponseResult SearchGroupByKeyword(@PathVariable String keyword,@PathVariable int pageOffset)
-    {
+    public ResponseResult SearchGroupByKeyword(@PathVariable String keyword,@PathVariable int pageOffset) throws IOException {
         return luceneService.SearchGroupByKeyword(keyword,pageOffset);
     }
 }

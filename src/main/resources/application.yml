@@ -15,7 +15,7 @@ spring:
 #    activate:
 #      on-profile: windows
   datasource:
-    url: jdbc:mysql://localhost:3306/glimmer_index?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/glimmer_index?characterEncoding=utf-8&serverTimezone=UTC-8
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
