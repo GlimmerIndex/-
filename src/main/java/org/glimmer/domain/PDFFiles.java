@@ -1,6 +1,7 @@
 package org.glimmer.domain;
 
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +27,7 @@ public class PDFFiles {
     /**
      * 文件内容
      */
+    @TableField(value = "file_data")
     private String filePath;
     /**
      * 文件大小
