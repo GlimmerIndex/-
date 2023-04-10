@@ -135,6 +135,11 @@
             <artifactId>ik-analyzer</artifactId>
             <version>8.5.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-highlighter</artifactId>
+            <version>8.11.2</version>
+        </dependency>
     </dependencies>
 
 </project>
