@@ -72,4 +72,8 @@ public class PDFFiles {
      * 点踩数
      */
     private Long dislikeNumber;
+    /**
+     * 点击量
+     */
+    private Long visits;
 }

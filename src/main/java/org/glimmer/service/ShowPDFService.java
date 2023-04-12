@@ -13,7 +13,7 @@ public interface ShowPDFService {
      * @param fileId
      * @return
      */
-    public ResponseEntity<StreamingResponseBody> showPDF(Long fileId);
+    public String showPDF(Long fileId);
 
 
 
