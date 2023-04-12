@@ -11,6 +11,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.grouping.GroupingSearch;
 import org.apache.lucene.search.grouping.TopGroups;
+import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.IOContext;
@@ -140,7 +141,7 @@ public class LuceneUtils {
     }
 
     /**
-     * 实际开发使用的ContentType,不需要存储
+     * 实际开发使用的ContentType
      * @return
      */
     @Bean("ContentType")
@@ -150,7 +151,7 @@ public class LuceneUtils {
          * 存储
          *
          */
-        fieldType.setStored(false);
+        fieldType.setStored(true);
         /**
          * 不索引
          *
@@ -207,5 +208,12 @@ public class LuceneUtils {
     public static TopGroups<BytesRef> group(IndexSearcher indexSearcher, Query query, String groupField,
                                      int groupDocsOffset, int groupDocsLimit, int groupOffset, int groupLimit) throws Exception {
         return group(indexSearcher, query, Sort.RELEVANCE, Sort.RELEVANCE, groupField, groupDocsOffset, groupDocsLimit, groupOffset, groupLimit);
+    }
+
+
+
+    @Bean
+    public static SimpleHTMLFormatter getSimpleHTMLFormatter() {
+        return new SimpleHTMLFormatter("<span class=\"highlight_glimmer\">","</span>");
     }
 }

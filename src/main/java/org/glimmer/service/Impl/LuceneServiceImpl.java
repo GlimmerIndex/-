@@ -3,6 +3,7 @@ package org.glimmer.service.Impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.val;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
@@ -11,6 +12,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.grouping.GroupingSearch;
 import org.apache.lucene.search.grouping.TopGroups;
+import org.apache.lucene.search.highlight.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.BytesRef;
@@ -51,6 +53,9 @@ public class LuceneServiceImpl implements LuceneService {
     Analyzer analyzer;
     @Value("${lucene.index-path}")
     String indexPath;
+
+    @Autowired
+    SimpleHTMLFormatter simpleHTMLFormatter;
     /**
      * 重新索引所有文件;
      *
@@ -173,15 +178,29 @@ public class LuceneServiceImpl implements LuceneService {
      */
     @Override
     public ResponseResult SearchGroupByKeyword(String keyword, int pageOffset) throws IOException {
+        /**
+         * 创建IndexSearcher
+         */
         IndexSearcher indexSearcher = null;
         try {
             indexSearcher = new IndexSearcher(DirectoryReader.open(FSDirectory.open(Path.of(indexPath))));
         } catch (IOException e) {
            return new ResponseResult(5002,"无法打开索引文件");
         }
+        /**
+         * 对content字段进行keyword查询
+         */
         val term = new Term("content",keyword);
         val termQuery = new TermQuery(term);
         int groupOffset = groupLimit * (pageOffset-1);
+        /**
+         * 高亮查询部分
+         */
+        QueryScorer score = new QueryScorer(termQuery);
+        Highlighter highlighter = new Highlighter(simpleHTMLFormatter,score);
+        Fragmenter fragmenter = new SimpleSpanFragmenter(score);
+        highlighter.setTextFragmenter(fragmenter);
+
         TopGroups<BytesRef> topGroups = null;
         try {
             topGroups = LuceneUtils.group(indexSearcher, termQuery, "pdf_id", 0, groupDocsLimit, groupOffset, groupLimit);
@@ -202,25 +221,17 @@ public class LuceneServiceImpl implements LuceneService {
                     pdf_id = doc.getField("pdf_id").stringValue();
                     String page_id = doc.getField("page_id").stringValue();
                     String para_id = doc.getField("para_id").stringValue();
-
-
-                    val docsLambdaQueryWrapper = new LambdaQueryWrapper<Docs>();
-                    docsLambdaQueryWrapper.eq(Docs::getPdfId,pdf_id).eq(Docs::getPageId,page_id).eq(Docs::getParaId,para_id);
-
-                    val paras = docsMapper.selectList(docsLambdaQueryWrapper);
-                    if(paras.isEmpty()) {
-                        throw new RuntimeException();
-                    }
-                    StringBuilder content = new StringBuilder();
-                    for(val paraHit:paras) {
-                        para.AddPara(paraHit.content);
-                    }
+                    TokenStream tokenStream = TokenSources.getAnyTokenStream(indexSearcher.getIndexReader(),scoreDoc.doc,"content",analyzer);
+                    String str = highlighter.getBestFragment(tokenStream,doc.get("content"));
+                    para.AddPara(new Docs(null,pdf_id,page_id,para_id,str));
                 } catch (IOException e) {
                    return new ResponseResult(5006,"索引查找失败");
                 }
                 catch (RuntimeException e) {
                     e.printStackTrace();
                     return new ResponseResult(3001,"数据库错误");
+                } catch (InvalidTokenOffsetsException e) {
+                    throw new RuntimeException(e);
                 }
 
             }
@@ -233,7 +244,6 @@ public class LuceneServiceImpl implements LuceneService {
                 continue;
             }
             para.setFileName(String.valueOf(pdfFilesName.get(0).getFileName()));
-
             para.setFileID(String.valueOf(pdfFilesName.get(0).getId()));
             result.add(para);
         }
