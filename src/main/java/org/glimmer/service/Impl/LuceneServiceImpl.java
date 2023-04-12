@@ -245,6 +245,10 @@ public class LuceneServiceImpl implements LuceneService {
             }
             para.setFileName(String.valueOf(pdfFilesName.get(0).getFileName()));
             para.setFileID(String.valueOf(pdfFilesName.get(0).getId()));
+            para.setFileSize(pdfFilesName.get(0).getFileSize());
+            para.setLikeNumber(pdfFilesName.get(0).getLikeNumber());
+            para.setDislikeNumber(pdfFilesName.get(0).getDislikeNumber());
+            para.setUploadTime(pdfFilesName.get(0).getUploadTime());
             result.add(para);
         }
         return new ResponseResult<>(200,"查找成功",result);

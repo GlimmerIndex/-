@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.IOException;
+
 @SpringBootTest
 public class LuceneServiceTest {
     @Autowired
@@ -16,7 +18,7 @@ public class LuceneServiceTest {
         luceneService.FlushIndex();
     }
     @Test
-    public void SearchTest (){
+    public void SearchTest () throws IOException {
         System.out.println(JSON.toJSONString(luceneService.SearchGroupByKeyword("萧炎",0)));
 
     }

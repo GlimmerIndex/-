@@ -4,8 +4,13 @@ import org.glimmer.config.PDFUploadConfig;
 import org.glimmer.domain.PDFFiles;
 import org.glimmer.domain.ResponseResult;
 import org.glimmer.mapper.PDFFilesMapper;
+import org.glimmer.service.LuceneService;
+import org.glimmer.service.OCRService;
 import org.glimmer.service.UploadPDFService;
+import org.glimmer.utils.TessUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.tika.Tika;
@@ -24,9 +29,8 @@ public class UploadPDFServicelmpl implements UploadPDFService {
     @Autowired
     PDFFilesMapper PDFfilesMapper;
 
-
-
-
+    @Value("${pdf-files.load-path}")
+    String filePath;
     @Override
     public ResponseResult uploadPDF(MultipartFile[] pdfFiles,Long id)throws IOException{
         String hashString;
@@ -64,7 +68,7 @@ public class UploadPDFServicelmpl implements UploadPDFService {
             PDFFiles rightPDFFiles = new PDFFiles();
             rightPDFFiles.setUploadBy(id);//上传人ID
             String uniqueFileName = generateUniqueFileName(file.getOriginalFilename());
-            rightPDFFiles.setFilePath("PDFFiles/"+uniqueFileName);//文件路径
+            rightPDFFiles.setFilePath(TessUtils.getPrefix(uniqueFileName));//文件路径
             rightPDFFiles.setHashFileName(hashString);//文件哈希串
             rightPDFFiles.setFileName(file.getOriginalFilename());//文件原始名
             rightPDFFiles.setFileSize(file.getSize());//文件大小
@@ -72,18 +76,31 @@ public class UploadPDFServicelmpl implements UploadPDFService {
             Date date = new Date();
             rightPDFFiles.setUploadTime(date);//文件上传时间
             saveFile(file.getInputStream(),uniqueFileName);//保存文件
+            OCRandUpdateIndex(uniqueFileName);
             try{
                 PDFfilesMapper.insert(rightPDFFiles);
             }catch (Exception e){
                 e.printStackTrace();
                 return new ResponseResult(4015,"文件上传失败，数据库发生错误，请联系管理员");
             }
-
         }
         return new ResponseResult(201,"文件上传成功");
     }
-
-
+    @Autowired
+    OCRService ocrService;
+    @Autowired
+    LuceneService luceneService;
+    @Async
+    void OCRandUpdateIndex(String fileName) {
+        try {
+            ocrService.pdfToPng(fileName);
+            ocrService.ocrByPath(fileName);
+            luceneService.AddPdfIndex(fileName);
+            System.out.println("创建索引成功："+fileName);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public boolean isValidFileType(String fileName, List<String> allowType){
         String fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
@@ -146,7 +163,7 @@ public class UploadPDFServicelmpl implements UploadPDFService {
 
         OutputStream os = null;
         try {
-            String path = "PDFFiles/";
+            String path = filePath;
             // 2、保存到临时文件
             // 1K的数据缓冲
             byte[] bs = new byte[1024];

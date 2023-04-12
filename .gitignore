@@ -39,3 +39,5 @@ index/
 ### OCR file
 *.pdf
 *.png
+upload/
+images/
