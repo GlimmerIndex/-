@@ -35,3 +35,7 @@ build/
 ### Index File
 dir/
 index/
+
+### OCR file
+*.pdf
+*.png

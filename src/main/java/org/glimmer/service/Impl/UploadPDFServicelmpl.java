@@ -30,7 +30,7 @@ public class UploadPDFServicelmpl implements UploadPDFService {
     @Override
     public ResponseResult uploadPDF(MultipartFile[] pdfFiles,Long id)throws IOException{
         String hashString;
-        if(pdfFiles.length==1&&pdfFiles[0].isEmpty()){
+        if(pdfFiles==null||pdfFiles.length==0||pdfFiles[0].isEmpty()){
             return new ResponseResult(4009,"请选择文件");
         }
         for(MultipartFile file : pdfFiles){
