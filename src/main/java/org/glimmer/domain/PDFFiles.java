@@ -27,7 +27,6 @@ public class PDFFiles {
     /**
      * 文件内容
      */
-    @TableField(value = "file_data")
     private String filePath;
     /**
      * 文件大小
@@ -73,4 +72,8 @@ public class PDFFiles {
      * 点踩数
      */
     private Long dislikeNumber;
+    /**
+     * 点击量
+     */
+    private Long visits;
 }
