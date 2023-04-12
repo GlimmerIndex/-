@@ -21,39 +21,20 @@ public class ShowPDFServicelmpl implements ShowPDFService {
 
 
     @Override
-    public ResponseEntity<StreamingResponseBody> showPDF(Long fileId){
+    public String showPDF(Long fileId){
         if (fileId == null){
-            return ResponseEntity.notFound().build();
+            return null;
         }
         PDFFiles pdfFile = pdfFilesMapper.selectById(fileId);
         if(pdfFile == null){
-            return ResponseEntity.notFound().build();
+            return null;
         }
         String filePath = pdfFile.getFilePath();
         File file = new File(filePath);
         if (file == null&&file.canRead() == false){
-            return ResponseEntity.notFound().build();
+            return null;
         }
-        try {
-            pdfFilesMapper.visitsIncrement(fileId);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_PDF);
-            headers.setContentDispositionFormData("inline",pdfFile.getFileName());
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .body(outputStream -> {
-                        try  {InputStream inputStream = new FileInputStream(file);
-                            StreamUtils.copy(inputStream,outputStream);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            System.out.println("输出流错误");
-                        }
-                    });
-        }catch (Exception exception){
-            exception.printStackTrace();
-             return ResponseEntity.noContent().build();
-        }
-
+        return filePath;
     }
 
 
