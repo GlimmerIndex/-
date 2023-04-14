@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -32,6 +33,7 @@ public class User implements Serializable {
     /**
      * 密码
      */
+    @JsonIgnore
     private String password;
     /**
      * 账号状态（0正常 1停用）

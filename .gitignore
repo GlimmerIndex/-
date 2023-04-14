@@ -31,3 +31,13 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Index File
+dir/
+index/
+
+### OCR file
+*.pdf
+*.png
+upload/
+images/

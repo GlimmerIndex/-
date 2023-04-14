@@ -11,11 +11,11 @@ public class LoginController {
 
     @Autowired
     LoginService loginService;
-    @PostMapping("/login")
+    @PostMapping("/user/login")
     public ResponseResult login(@RequestBody User user) {
         return loginService.login(user);
     }
-    @RequestMapping("/logoff")
+    @RequestMapping("/user/logout")
     public ResponseResult logout() {
         return loginService.logout();
     }

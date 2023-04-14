@@ -28,4 +28,12 @@ public class JWTTest {
     void getEncodedPasswd() {
         System.out.println(passwordEncoder.encode("1234"));
     }
+
+    @Test
+    void matchEncodedPasswd(){
+        String encode = passwordEncoder.encode("1234");
+        String encode2 = passwordEncoder.encode("1234");
+        System.out.println(passwordEncoder.matches("1234",encode));;
+        System.out.println(passwordEncoder.matches(encode,encode2));
+    }
 }

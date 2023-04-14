@@ -15,12 +15,39 @@ spring:
 #    activate:
 #      on-profile: windows
   datasource:
-    url: jdbc:mysql://localhost:3306/glimmer_index?useSSL=false&characterEncoding=utf-8&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/glimmer_index?characterEncoding=utf-8&serverTimezone=UTC-8
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
+  mail:
+    password: qmqebiqmlszujacg
+    host: smtp.qq.com
+    username: antio2@qq.com
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 1000MB
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+
+
+  aop:
+    proxy-target-class=false:
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
 #  redis:
 #    password: 123456
+storage:
+  image:
+    #允许上传的类型
+    allow-type:
+      pdf
+
